@@ -1,0 +1,21 @@
+C:\Users\Rekha Sharma\AppData\Roaming\Python\Python313\site-packages\torch\jit\_script.py:1491: FutureWarning: `torch.jit.script` is deprecated. Please switch to `torch.compile` or `torch.export`.
+  warnings.warn(
+rainfall model: test NLL 1.314 vs climatology 1.410; P(annual<1000mm) 22%
+
+== velachery ==
+  250 buildings, 48 candidate hubs, 1106 links
+  individual       25657 m3/yr   21.7 L/Rs  net Rs  1,898,117  shared   0  (6.0s)
+  design_storm     33290 m3/yr   12.4 L/Rs  net Rs  1,316,436  shared   0  (0.0s)
+  proximity        28900 m3/yr   12.2 L/Rs  net Rs  1,092,766  shared 247  (26.8s)
+  surrogate        26528 m3/yr   21.1 L/Rs  net Rs  1,923,649  shared  46  (13.1s)
+  full_milp        26718 m3/yr   20.7 L/Rs  net Rs  1,914,553  shared  47  (459.0s)
+  gnn              25657 m3/yr   21.7 L/Rs  net Rs  1,898,117  shared   0  (9.1s)
+
+== anna_nagar ==
+  250 buildings, 50 candidate hubs, 3246 links
+  individual       18273 m3/yr   16.1 L/Rs  net Rs  1,058,440  shared   0  (5.5s)
+  design_storm     25583 m3/yr    9.6 L/Rs  net Rs    415,765  shared   0  (0.0s)
+  proximity        19890 m3/yr    7.2 L/Rs  net Rs   -363,533  shared 249  (31.4s)
+  surrogate        18347 m3/yr   16.1 L/Rs  net Rs  1,062,654  shared  13  (16.1s)
+  full_milp        18347 m3/yr   16.1 L/Rs  net Rs  1,062,654  shared  13  (265.0s)
+  gnn              18273 m3/yr   16.1 L/Rs  net Rs  1,058,440  shared   0  (6.3s)

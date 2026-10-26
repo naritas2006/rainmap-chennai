@@ -1,0 +1,11 @@
+{
+  "n_test": 20,
+  "mean_gap": 0.024691104286494053,
+  "median_gap": 0.007729611192764224,
+  "gain_recovered": 0.4833766198572273,
+  "speedup": 7.804747212875717,
+  "gnn_beats_proximity": 1.0,
+  "surrogate_mean_gap": 0.005749796113454447,
+  "surrogate_median_gap": 0.0024594367916225034,
+  "surrogate_speedup": 0.7800109901060372
+}

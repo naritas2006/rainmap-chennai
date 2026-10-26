@@ -1,0 +1,23 @@
+numpy>=2.0
+pandas>=2.2
+scipy>=1.11          # scipy.optimize.milp (HiGHS) for the full-scale benchmark MILP
+pyomo>=6.7           # surrogate MILP
+highspy>=1.7         # HiGHS for Pyomo (appsi_highs)
+networkx>=3.2
+geopandas>=1.0
+shapely>=2.0
+pyproj>=3.6
+pyarrow>=15
+osmnx>=2.0
+duckdb>=1.0          # clip Open Buildings from the cloud GeoParquet
+s2sphere>=0.2
+imdlib>=0.1.20       # IMD gridded rainfall download
+torch>=2.2
+torchvision>=0.17    # roof-material CNN (ResNet-18)
+torch_geometric>=2.5 # GNN
+pillow>=10
+requests>=2.31
+fastapi>=0.110
+uvicorn>=0.29
+pytest>=8
+# optional: rasterio (DEM elevations via osmnx), kaggle (RoofNet download)

@@ -1,0 +1,13 @@
+# raw and cached data (re-download with the commands in README)
+data/
+cache/
+
+# build artefacts
+frontend/node_modules/
+frontend/dist/
+__pycache__/
+*.pyc
+.pytest_cache/
+
+# run logs
+*_log.txt

@@ -1,0 +1,60 @@
+[
+  {
+    "name": "mylapore",
+    "held_out": false,
+    "centre": [
+      13.03406387591498,
+      80.2699778453031
+    ],
+    "sources": {
+      "buildings": "Open Buildings GeoParquet",
+      "streets": "OpenStreetMap via OSMnx",
+      "terrain": "flat (no DEM given)",
+      "rainfall": "IMD 0.25deg gridded"
+    }
+  },
+  {
+    "name": "t_nagar",
+    "held_out": false,
+    "centre": [
+      13.042026388122641,
+      80.23439271441177
+    ],
+    "sources": {
+      "buildings": "Open Buildings GeoParquet",
+      "streets": "OpenStreetMap via OSMnx",
+      "terrain": "flat (no DEM given)",
+      "rainfall": "IMD 0.25deg gridded"
+    }
+  },
+  {
+    "name": "velachery",
+    "held_out": false,
+    "centre": [
+      12.979064056088108,
+      80.22089209787869
+    ],
+    "sources": {
+      "buildings": "Open Buildings GeoParquet",
+      "streets": "OpenStreetMap via OSMnx",
+      "terrain": "flat (no DEM given)",
+      "rainfall": "IMD 0.25deg gridded",
+      "roof_material": "prior (no CNN predictions)"
+    }
+  },
+  {
+    "name": "anna_nagar",
+    "held_out": true,
+    "centre": [
+      13.085053722607359,
+      80.21010397652941
+    ],
+    "sources": {
+      "buildings": "Open Buildings GeoParquet",
+      "streets": "OpenStreetMap via OSMnx",
+      "terrain": "flat (no DEM given)",
+      "rainfall": "IMD 0.25deg gridded",
+      "roof_material": "prior (no CNN predictions)"
+    }
+  }
+]
