@@ -100,6 +100,49 @@ def benchmark_section(g: dict | None, bench: pd.DataFrame | None) -> list[str]:
     return lines
 
 
+def breakeven_section(be: pd.DataFrame | None, threshold: float = 0.2) -> list[str]:
+    if be is None:
+        return ["_No sweep yet (`python -m rainmap.breakeven`)._", ""]
+    values = sorted(be.water_value.unique())
+    lines = ["Surrogate design vs private tanks only, both re-solved at each water value and evaluated "
+             "on held-out years.", "",
+             "Buildings sharing a tank (of 250):", "",
+             "| Neighbourhood | " + " | ".join(f"₹{v:.0f}" for v in values) + " |",
+             "|---|" + "---|" * len(values)]
+    for nb, g in be.groupby("neighbourhood", sort=False):
+        g = g.set_index("water_value")
+        lines.append(f"| {nb} | " + " | ".join(str(int(g.buildings_shared.get(v, 0))) for v in values) + " |")
+    lines += ["", "Sharing gain, ₹/yr (optimised net value minus private-only net value):", "",
+              "| Neighbourhood | " + " | ".join(f"₹{v:.0f}" for v in values) + " |",
+              "|---|" + "---|" * len(values)]
+    for nb, g in be.groupby("neighbourhood", sort=False):
+        g = g.set_index("water_value")
+        lines.append(f"| {nb} | " + " | ".join(_rs(g.sharing_gain.get(v, 0)) for v in values) + " |")
+    if "fallback" in be:
+        if "surrogate_buildings_shared" in be:
+            worse = int((be.fallback & (be.surrogate_buildings_shared > 0)).sum())
+            lines += ["", f"In {worse} of {len(be)} runs the surrogate proposed sharing that scored worse than "
+                      "private tanks on the design objective; private tanks were kept there."]
+        else:
+            lines += ["", f"In {int(be.fallback.sum())} of {len(be)} runs the surrogate design did not beat "
+                      "private tanks on the design objective (worse, or private tanks too); private tanks "
+                      "were kept there."]
+        neg = be[~be.fallback & (be.sharing_gain < 0)]
+        if len(neg):
+            cases = ", ".join(f"{r.neighbourhood} ₹{r.water_value:.0f}" for r in neg.itertuples())
+            lines += ["", f"Negative gains that remain ({cases}) are designs that beat private tanks on the "
+                      "risk-adjusted design objective (which rewards the worst 25% of years) but deliver less "
+                      "average value on the held-out years. They mark where sharing is marginal, not where it "
+                      "clearly pays."]
+    lines += ["", f"Break-even = lowest tested water value at which at least {threshold:.0%} of buildings "
+              "share a tank and sharing beats private tanks on held-out years.", ""]
+    for nb, g in be.groupby("neighbourhood", sort=False):
+        hit = g[(g.buildings_shared >= threshold * 250) & (g.sharing_gain > 0)].sort_values("water_value")
+        lines.append(f"- **{nb}**: " + (f"₹{hit.water_value.iloc[0]:.0f}/m³" if len(hit)
+                                         else f"not reached up to ₹{g.water_value.max():.0f}/m³"))
+    return lines + [""]
+
+
 def findings(summaries: dict) -> list[str]:
     done = {k: s for k, s in summaries.items() if s and "recommended" in s}
     if not done:
@@ -131,7 +174,9 @@ def write(path: Path = ROOT / "RESULTS.md") -> Path:
              "and runoff draws.", ""]
     for name, s in summaries.items():
         lines += neighbourhood_section(name, s)
-    lines += ["## GNN and surrogate benchmark", "",
+    be = pd.read_csv(OUT / "breakeven.csv") if (OUT / "breakeven.csv").exists() else None
+    lines += ["## When does sharing pay?", "", *breakeven_section(be),
+              "## GNN and surrogate benchmark", "",
               *benchmark_section(_load(OUT / "gnn_summary.json"), bench),
               "## Roof CNN", "",
               json.dumps(roof, indent=2) if roof else "_Not trained or validated yet; every roof uses the "

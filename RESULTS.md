@@ -119,6 +119,39 @@ Water value sensitivity (surrogate MILP):
 | 250 | 6 | 40 | 186 |
 | 400 | 11 | 108 | 130 |
 
+## When does sharing pay?
+
+Surrogate design vs private tanks only, both re-solved at each water value and evaluated on held-out years.
+
+Buildings sharing a tank (of 250):
+
+| Neighbourhood | ₹40 | ₹60 | ₹80 | ₹100 | ₹120 | ₹150 | ₹200 | ₹250 | ₹300 | ₹400 |
+|---|---|---|---|---|---|---|---|---|---|---|
+| mylapore | 0 | 0 | 9 | 10 | 18 | 65 | 87 | 97 | 99 | 141 |
+| t_nagar | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 22 | 0 |
+| velachery | 0 | 0 | 0 | 9 | 46 | 78 | 91 | 108 | 107 | 139 |
+| anna_nagar | 0 | 4 | 6 | 6 | 13 | 25 | 37 | 40 | 63 | 108 |
+
+Sharing gain, ₹/yr (optimised net value minus private-only net value):
+
+| Neighbourhood | ₹40 | ₹60 | ₹80 | ₹100 | ₹120 | ₹150 | ₹200 | ₹250 | ₹300 | ₹400 |
+|---|---|---|---|---|---|---|---|---|---|---|
+| mylapore | 0 | 0 | 1,364 | 2,973 | 5,515 | 22,126 | 70,947 | 113,635 | 156,231 | 314,851 |
+| t_nagar | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | -6,987 | 0 |
+| velachery | 0 | 0 | 0 | 4,592 | 25,531 | 32,304 | 88,569 | 171,452 | 301,691 | 845,556 |
+| anna_nagar | 0 | -3,662 | -1,769 | 893 | 4,214 | 2,937 | -14,335 | 6,639 | -20,656 | -28,545 |
+
+In 15 of 40 runs the surrogate design did not beat private tanks on the design objective (worse, or private tanks too); private tanks were kept there.
+
+Negative gains that remain (t_nagar ₹300, anna_nagar ₹60, anna_nagar ₹80, anna_nagar ₹200, anna_nagar ₹300, anna_nagar ₹400) are designs that beat private tanks on the risk-adjusted design objective (which rewards the worst 25% of years) but deliver less average value on the held-out years. They mark where sharing is marginal, not where it clearly pays.
+
+Break-even = lowest tested water value at which at least 20% of buildings share a tank and sharing beats private tanks on held-out years.
+
+- **mylapore**: ₹150/m³
+- **t_nagar**: not reached up to ₹400/m³
+- **velachery**: ₹150/m³
+- **anna_nagar**: not reached up to ₹400/m³
+
 ## GNN and surrogate benchmark
 
 20 unseen synthetic instances (103–143 buildings).

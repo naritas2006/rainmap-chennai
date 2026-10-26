@@ -103,8 +103,8 @@ def buildings_gdf(inst, design, units) -> gpd.GeoDataFrame:
     return g.to_crs(WGS84)
 
 
-def run_one(nb, cfg: Config, args, gnn_model, scenario_rain: dict | None) -> dict:
-    print(f"\n== {nb.name} ==")
+def prepare(nb, cfg: Config, args, scenario_rain: dict | None):
+    """Instance, design scenarios, held-out evaluation scenarios and fitted surrogate."""
     b, G, sources = load_area(nb, cfg, args)
     series, rain_src = rainfall.load_rainfall(list(cfg.train_years) + list(cfg.test_years),
                                               args.imd, seed=cfg.seed)
@@ -119,8 +119,12 @@ def run_one(nb, cfg: Config, args, gnn_model, scenario_rain: dict | None) -> dic
     sc = optimize.scenario_set(inst, scenario_rain or train, cfg.opt.periods,
                                cfg.uncertainty.n_area_draws, cfg.opt.n_scenarios, cfg.seed)
     ev = optimize.scenario_set(inst, test, 365, args.eval_draws, None, cfg.seed + 1)
+    return inst, sc, ev, YieldSurrogate.fit(sc.rain, seed=cfg.seed)
 
-    surrogate = YieldSurrogate.fit(sc.rain, seed=cfg.seed)
+
+def run_one(nb, cfg: Config, args, gnn_model, scenario_rain: dict | None) -> dict:
+    print(f"\n== {nb.name} ==")
+    inst, sc, ev, surrogate = prepare(nb, cfg, args, scenario_rain)
     designs = {"individual": baselines.individual(inst, sc),
                "design_storm": baselines.design_storm(inst, sc),
                "proximity": baselines.proximity(inst, sc),
